@@ -1,0 +1,5 @@
+salt-formula-ironic (0.1) trusty; urgency=medium
+
+  * Initial release
+
+ -- Vasyl Saienko <vsaienko@mirantis.com>  Thu, 27 Apr 2017 23:23:41 +0200

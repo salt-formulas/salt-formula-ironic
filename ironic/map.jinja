@@ -1,0 +1,35 @@
+{% set api = salt['grains.filter_by']({
+    'Common': {
+        'pkgs': ['ironic-api'],
+        'service': 'ironic-api',
+    }
+}, base='Common', merge=pillar.ironic.get('api', {})) %}
+
+{% set conductor = salt['grains.filter_by']({
+    'Common': {
+        'service': 'ironic-conductor',
+        'ipxe_rom_files': ['undionly.kpxe', 'ipxe.efi'],
+    },
+    'Debian': {
+        'pkgs': ['ipmitool', 'ironic-conductor', 'tftpd-hpa', 'syslinux-common', 'pxelinux', 'ipxe'],
+        'pxelinux_path': '/usr/lib/PXELINUX',
+        'syslinux_files': ['chain.c32', 'libcom32.c32', 'libutil.c32'],
+        'syslinux_path': '/usr/lib/syslinux/modules/bios',
+        'ipxe_rom_path': '/usr/lib/ipxe',
+    },
+    'RedHat': {
+        'pkgs': ['ipmitool', 'ironic-conductor', 'tftp-server', 'syslinux-extlinux', 'ipxe-bootimgs'],
+        'pxelinux_path': '/usr/share/syslinux',
+        'syslinux_files': ['chain.c32'],
+        'syslinux_path': '/usr/share/syslinux',
+        'ipxe_rom_path': '/usr/share/ipxe',
+    },
+}, base='Common', merge=pillar.ironic.get('conductor', {})) %}
+
+{% set client = salt['grains.filter_by']({
+    'Common': {
+      'pkgs': ['python-ironicclient'],
+    },
+}, base='Common', merge=pillar.ironic.get('client', {})) %}
+
+{% set ironic = pillar.get('ironic', {}) %}

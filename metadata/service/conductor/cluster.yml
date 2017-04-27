@@ -1,0 +1,52 @@
+applications:
+  - ironic
+parameters:
+  ironic:
+    conductor:
+      enabled: true
+      version: ${_param:ironic_version}
+      message_queue:
+        engine: rabbitmq
+        port: 5672
+        user: openstack
+        password: ${_param:rabbitmq_openstack_password}
+        virtual_host: '/openstack'
+        host: ${_param:cluster_vip_address}
+      database:
+        engine: mysql
+        host: ${_param:cluster_vip_address}
+        port: 3306
+        name: ironic
+        user: ironic
+        password: ${_param:mysql_ironic_password}
+      identity:
+        engine: keystone
+        region: RegionOne
+        host: ${_param:cluster_vip_address}
+        port: 35357
+        user: ironic
+        password: ${_param:keystone_ironic_password}
+        tenant: service
+        auth_type: password
+        user_domain_id: default
+        project_domain_id: default
+        protocol: 'http'
+      neutron:
+        cleaning_network: baremetal
+        provisioning_network: baremetal
+        project_domain_id: ${ironic:conductor:identity:project_domain_id}
+        user_domain_id: ${ironic:conductor:identity:user_domain_id}
+        password: ${ironic:conductor:identity:password}
+        username: ${ironic:conductor:identity:user}
+      enabled_drivers:
+        - agent_ipmitool
+        - fake
+      automated_clean: false
+      http_url: 'http://${_param:cluster_vip_address}'
+      api_url: 'http://${_param:cluster_vip_address}:6385'
+      pxe_config_template: '$pybasedir/drivers/modules/ipxe_config.template'
+      pxe_bootfile_name: '/undionly.kpxe'
+      ipxe_enabled: true
+      http_root: '/var/www/httproot'
+      tftp_root: '/var/lib/tftpboot'
+      tftp_master_path: '/var/lib/tftpboot/master_images'
