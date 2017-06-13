@@ -3,6 +3,7 @@ applications:
 parameters:
   ironic:
     api:
+      api_type: ${_param:ironic_api_type}
       enabled: true
       version: ${_param:ironic_version}
       bind:
@@ -15,10 +16,10 @@ parameters:
         user: openstack
         password: ${_param:rabbitmq_openstack_password}
         virtual_host: '/openstack'
-        host: ${_param:cluster_vip_address}
+        host: ${_param:openstack_message_queue_address}
       database:
         engine: mysql
-        host: ${_param:cluster_vip_address}
+        host: ${_param:openstack_database_address}
         port: 3306
         name: ironic
         user: ironic

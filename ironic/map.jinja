@@ -2,6 +2,7 @@
     'Common': {
         'pkgs': ['ironic-api'],
         'service': 'ironic-api',
+        'api_type': 'mixed',
     }
 }, base='Common', merge=pillar.ironic.get('api', {})) %}
 

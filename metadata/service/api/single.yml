@@ -3,6 +3,7 @@ applications:
 parameters:
   ironic:
     api:
+      api_type: 'mixed'
       enabled: true
       version: ${_param:ironic_version}
       bind:

@@ -5,16 +5,17 @@ parameters:
     conductor:
       enabled: true
       version: ${_param:ironic_version}
+      my_ip: ${_param:cluster_baremetal_local_address}
       message_queue:
         engine: rabbitmq
         port: 5672
         user: openstack
         password: ${_param:rabbitmq_openstack_password}
         virtual_host: '/openstack'
-        host: ${_param:cluster_vip_address}
+        host: ${_param:openstack_message_queue_address}
       database:
         engine: mysql
-        host: ${_param:cluster_vip_address}
+        host: ${_param:openstack_database_address}
         port: 3306
         name: ironic
         user: ironic
@@ -32,18 +33,35 @@ parameters:
         project_domain_id: default
         protocol: 'http'
       neutron:
+        auth_strategy: keystone
+        auth_type: password
         cleaning_network: baremetal
         provisioning_network: baremetal
         project_domain_id: ${ironic:conductor:identity:project_domain_id}
         user_domain_id: ${ironic:conductor:identity:user_domain_id}
+        project_name: ${ironic:conductor:identity:tenant}
         password: ${ironic:conductor:identity:password}
         username: ${ironic:conductor:identity:user}
+        url: http://${_param:neutron_service_host}:9696
+      glance:
+        auth_strategy: 'keystone'
+        auth_type: password
+        host: ${_param:cluster_vip_address}
+        port: 9292
+        region: ${_param:openstack_region}
+        username: glance
+        tenant: service
+        project_name: service
+        project_domain_name: Default
+        user_domain_name: Default
+        password: ${_param:keystone_glance_password}
       enabled_drivers:
         - agent_ipmitool
+        - pxe_ipmitool
         - fake
       automated_clean: false
-      http_url: 'http://${_param:cluster_vip_address}'
-      api_url: 'http://${_param:cluster_vip_address}:6385'
+      http_url: 'http://${_param:cluster_baremetal_local_address}'
+      api_url: 'http://${_param:cluster_vip_baremtal_address}:6385'
       pxe_config_template: '$pybasedir/drivers/modules/ipxe_config.template'
       pxe_bootfile_name: '/undionly.kpxe'
       ipxe_enabled: true

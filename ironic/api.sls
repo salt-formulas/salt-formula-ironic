@@ -21,4 +21,13 @@ ironic_install_database:
     - full_restart: true
     - watch:
       - file: /etc/ironic/ironic.conf
+      - file: /etc/ironic/policy.json
+
+/etc/ironic/policy.json:
+  file.managed:
+  - source: salt://ironic/files/{{ api.version }}/policy.json
+  - template: jinja
+  - require:
+    - pkg: ironic_api_packages
+
 {%- endif %}
