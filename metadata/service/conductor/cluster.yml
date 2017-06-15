@@ -35,8 +35,8 @@ parameters:
       neutron:
         auth_strategy: keystone
         auth_type: password
-        cleaning_network: baremetal
-        provisioning_network: baremetal
+        cleaning_network: baremetal-flat-network
+        provisioning_network: baremetal-flat-network
         project_domain_id: ${ironic:conductor:identity:project_domain_id}
         user_domain_id: ${ironic:conductor:identity:user_domain_id}
         project_name: ${ironic:conductor:identity:tenant}
