@@ -68,4 +68,18 @@ ironic_tftp_map_file:
     - require:
       - file: ironic_dirs
 
+{%- if conductor.http_images is defined %}
+{%- for image in conductor.http_images %}
+
+image_{{ image.name }}:
+  file.managed:
+    - name: {{ conductor.http_root }}/{{ image.name }}
+    - source: {{ image.source }}
+    - source_hash: md5={{ image.md5summ }}
+    - user: 'ironic'
+    - group: 'ironic'
+
+{%- endfor %}
+{%- endif %}
+
 {%- endif %}

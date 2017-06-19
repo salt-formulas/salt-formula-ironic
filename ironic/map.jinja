@@ -30,7 +30,9 @@
 {% set client = salt['grains.filter_by']({
     'Common': {
       'pkgs': ['python-ironicclient'],
+      'nodes': {}
     },
 }, base='Common', merge=pillar.ironic.get('client', {})) %}
 
+{%set deploy = pillar.ironic.get('deploy', {'enabled': false})%}
 {% set ironic = pillar.get('ironic', {}) %}

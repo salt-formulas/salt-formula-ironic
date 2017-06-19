@@ -13,10 +13,11 @@ node_{{ node.name }}_present:
   ironicng.node_present:
     - name: {{ node.name }}
     - driver: {{ node.driver }}
-    - properties: {{ node.properties }}
+    - properties: {{ node.properties|default({}) }}
     - profile: {{ identity_name }}
-    - driver_info: {{ node.driver_info }}
+    - driver_info: {{ node.driver_info|default({}) }}
 
+  {%- if node.ports is defined %}
   {%- for port in node.ports %}
 
 {{ node.name }}_port{{ loop.index }}_present:
@@ -26,6 +27,7 @@ node_{{ node.name }}_present:
     - profile: {{ identity_name }}
 
   {%- endfor %} # end for ports
+  {%- endif %} # end if node.ports defined
 
   {%- endfor %} # end for nodes
 {%- endfor %} # end client.nodes.iteritems

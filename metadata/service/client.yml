@@ -1,0 +1,6 @@
+applications:
+  - ironic
+parameters:
+  ironic:
+    client:
+      enabled: True
