@@ -61,8 +61,8 @@ ironic_tftp_map_file:
   file.managed:
     - name: {{ conductor.tftp_root }}/map-file
     - contents: |
-        r ^([^/]) {{ conductor.tftp_root }}/\\1
-        r ^(/tftpboot/) {{ conductor.tftp_root }}/\2
+        r ^[^/] /\0
+        r ^({{ conductor.tftp_root }}) /\2
     - user: 'ironic'
     - group: 'ironic'
     - require:
