@@ -22,6 +22,9 @@ ironic_install_database:
     - watch:
       - file: /etc/ironic/ironic.conf
       - file: /etc/ironic/policy.json
+    {%- if api.message_queue.get('ssl',{}).get('enabled', False) %}
+      - file: rabbitmq_ca
+    {%- endif %}
 
 /etc/ironic/policy.json:
   file.managed:

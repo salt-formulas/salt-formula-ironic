@@ -14,6 +14,9 @@ ironic_conductor_packages:
     - full_restart: true
     - watch:
       - file: /etc/ironic/ironic.conf
+    {%- if conductor.message_queue.get('ssl',{}).get('enabled', False) %}
+      - file: rabbitmq_ca
+    {%- endif %}
 
 ironic_dirs:
   file.directory:
