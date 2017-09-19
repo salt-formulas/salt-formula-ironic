@@ -67,10 +67,13 @@ def _autheticate(api_version=None):
             connection_args, nkwargs = _get_function_attrs(**kwargs)
             endpoint, token = _get_keystone_endpoint_and_token(**connection_args)
 
+            ironic_api_version = api_version or connection_args.get(
+                'connection_ironic_api_version', None)
+
             ironic_interface = _get_ironic_session(
                 endpoint=endpoint,
                 token = token,
-                api_version=api_version)
+                api_version=ironic_api_version)
 
             return func_name(ironic_interface, *args, **nkwargs)
         return decorator_method

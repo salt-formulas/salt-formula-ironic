@@ -24,6 +24,12 @@ node_{{ node.name }}_present:
   ironicng.port_present:
     - address: {{ port.address }}
     - node_name: {{ node.name }}
+    {%- if port.local_link_connection is defined %}
+    - local_link_connection: {{ port.local_link_connection }}
+    {%- endif %}
+    {%- if port.ironic_api_version is defined %}
+    - ironic_api_version: {{ port.ironic_api_version }}
+    {%- endif %}
     - profile: {{ identity_name }}
 
   {%- endfor %} # end for ports
