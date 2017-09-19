@@ -25,6 +25,9 @@ ironic_install_database:
     {%- if api.message_queue.get('ssl',{}).get('enabled', False) %}
       - file: rabbitmq_ca
     {%- endif %}
+    {%- if api.database.get('ssl',{}).get('enabled', False) %}
+      - file: mysql_ca_ironic_api
+    {%- endif %}
 
 /etc/ironic/policy.json:
   file.managed:

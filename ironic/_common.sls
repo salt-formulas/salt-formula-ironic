@@ -1,8 +1,8 @@
 {%- from "ironic/map.jinja" import api,conductor, system_cacerts_file with context %}
 {%- if api.get("enabled", False) %}
-  {%- set ironic = api %}
+  {%- set ironic, service_name = api, 'api' %}
 {%- elif conductor.get('enabled', False) %}
-  {%- set ironic = conductor %}
+  {%- set ironic, service_name = conductor, 'conductor' %}
 {%- endif %}
 
 ironic_common_pkgs:
@@ -22,11 +22,25 @@ rabbitmq_ca:
 {%- if ironic.message_queue.ssl.cacert is defined %}
   file.managed:
     - name: {{ ironic.message_queue.ssl.cacert_file }}
-    - contents_pillar: ironic:{{ 'api' if api.get("enabled", False) else 'conductor' }}:message_queue:ssl:cacert
+    - contents_pillar: ironic:{{ service_name }}:message_queue:ssl:cacert
     - mode: 0444
     - makedirs: true
 {%- else %}
   file.exists:
    - name: {{ ironic.message_queue.ssl.get('cacert_file', system_cacerts_file) }}
+{%- endif %}
+{%- endif %}
+
+{%- if ironic.database.get('ssl',{}).get('enabled', False) %}
+mysql_ca_ironic_{{ service_name }}:
+{%- if ironic.database.ssl.cacert is defined %}
+  file.managed:
+    - name: {{ ironic.databse.ssl.cacert_file }}
+    - contents_pillar: ironic:{{ service_name }}:database:ssl:cacert
+    - mode: 0444
+    - makedirs: true
+{%- else %}
+  file.exists:
+   - name: {{ ironic.database.ssl.get('cacert_file', system_cacerts_file) }}
 {%- endif %}
 {%- endif %}

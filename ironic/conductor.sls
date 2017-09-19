@@ -17,6 +17,9 @@ ironic_conductor_packages:
     {%- if conductor.message_queue.get('ssl',{}).get('enabled', False) %}
       - file: rabbitmq_ca
     {%- endif %}
+    {%- if conductor.database.get('ssl',{}).get('enabled', False) %}
+      - file: mysql_ca_ironic_conductor
+    {%- endif %}
 
 ironic_dirs:
   file.directory:
