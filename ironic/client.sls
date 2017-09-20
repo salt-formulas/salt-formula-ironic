@@ -16,6 +16,12 @@ node_{{ node.name }}_present:
     - properties: {{ node.properties|default({}) }}
     - profile: {{ identity_name }}
     - driver_info: {{ node.driver_info|default({}) }}
+    {%- if node.network_interface is defined %}
+    - network_interface: {{ node.network_interface }}
+    {%- endif %}
+    {%- if node.ironic_api_version is defined %}
+    - ironic_api_version: "{{ node.ironic_api_version }}"
+    {%- endif %}
 
   {%- if node.ports is defined %}
   {%- for port in node.ports %}
@@ -28,7 +34,7 @@ node_{{ node.name }}_present:
     - local_link_connection: {{ port.local_link_connection }}
     {%- endif %}
     {%- if port.ironic_api_version is defined %}
-    - ironic_api_version: {{ port.ironic_api_version }}
+    - ironic_api_version: "{{ port.ironic_api_version }}"
     {%- endif %}
     - profile: {{ identity_name }}
 
