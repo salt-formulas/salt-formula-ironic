@@ -15,7 +15,7 @@ ironic_conductor_packages:
     - watch:
       - file: /etc/ironic/ironic.conf
     {%- if conductor.message_queue.get('ssl',{}).get('enabled', False) %}
-      - file: rabbitmq_ca
+      - file: rabbitmq_ca_ironic_conductor
     {%- endif %}
     {%- if conductor.database.get('ssl',{}).get('enabled', False) %}
       - file: mysql_ca_ironic_conductor

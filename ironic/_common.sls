@@ -18,7 +18,7 @@ ironic_common_pkgs:
     - pkg: ironic_common_pkgs
 
 {%- if ironic.message_queue.get('ssl',{}).get('enabled', False) %}
-rabbitmq_ca:
+rabbitmq_ca_ironic_{{ service_name }}:
 {%- if ironic.message_queue.ssl.cacert is defined %}
   file.managed:
     - name: {{ ironic.message_queue.ssl.cacert_file }}

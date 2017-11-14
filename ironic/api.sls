@@ -23,7 +23,7 @@ ironic_install_database:
       - file: /etc/ironic/ironic.conf
       - file: /etc/ironic/policy.json
     {%- if api.message_queue.get('ssl',{}).get('enabled', False) %}
-      - file: rabbitmq_ca
+      - file: rabbitmq_ca_ironic_api
     {%- endif %}
     {%- if api.database.get('ssl',{}).get('enabled', False) %}
       - file: mysql_ca_ironic_api
