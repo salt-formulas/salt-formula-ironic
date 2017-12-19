@@ -1,4 +1,4 @@
-{%- from "ironic/map.jinja" import api,conductor, system_cacerts_file with context %}
+{%- from "ironic/map.jinja" import api,conductor with context %}
 {%- if api.get("enabled", False) %}
   {%- set ironic, service_name = api, 'api' %}
 {%- elif conductor.get('enabled', False) %}
@@ -27,7 +27,7 @@ rabbitmq_ca_ironic_{{ service_name }}:
     - makedirs: true
 {%- else %}
   file.exists:
-   - name: {{ ironic.message_queue.ssl.get('cacert_file', system_cacerts_file) }}
+   - name: {{ ironic.message_queue.ssl.get('cacert_file', ironic.cacert_file) }}
 {%- endif %}
 {%- endif %}
 
@@ -41,6 +41,6 @@ mysql_ca_ironic_{{ service_name }}:
     - makedirs: true
 {%- else %}
   file.exists:
-   - name: {{ ironic.database.ssl.get('cacert_file', system_cacerts_file) }}
+   - name: {{ ironic.database.ssl.get('cacert_file', ironic.cacert_file) }}
 {%- endif %}
 {%- endif %}

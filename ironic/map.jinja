@@ -1,13 +1,15 @@
-{%- set system_cacerts_file = salt['grains.filter_by']({
-    'Debian': '/etc/ssl/certs/ca-certificates.crt',
-    'RedHat': '/etc/pki/tls/certs/ca-bundle.crt'
-})%}
+{%- set cacert_file = salt['grains.filter_by']({
+        'Debian': '/etc/ssl/certs/ca-certificates.crt',
+        'RedHat': '/etc/pki/tls/certs/ca-bundle.crt'
+    })
+%}
 
 {% set api = salt['grains.filter_by']({
     'Common': {
         'pkgs': ['ironic-api'],
         'service': 'ironic-api',
         'api_type': 'mixed',
+        'cacert_file': cacert_file,
     }
 }, base='Common', merge=pillar.ironic.get('api', {})) %}
 
@@ -15,6 +17,7 @@
     'Common': {
         'service': 'ironic-conductor',
         'ipxe_rom_files': ['undionly.kpxe', 'ipxe.efi'],
+        'cacert_file': cacert_file,
     },
     'Debian': {
         'pkgs': ['ipmitool', 'ironic-conductor', 'tftpd-hpa', 'syslinux-common', 'pxelinux', 'ipxe'],
@@ -35,7 +38,8 @@
 {% set client = salt['grains.filter_by']({
     'Common': {
       'pkgs': ['python-ironicclient'],
-      'nodes': {}
+      'nodes': {},
+      'cacert_file': cacert_file,
     },
 }, base='Common', merge=pillar.ironic.get('client', {})) %}
 
