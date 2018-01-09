@@ -10,6 +10,6 @@ Vcs-Git: https://github.com/salt-formulas/salt-formula-ironic.git
 
 Package: salt-formula-ironic
 Architecture: all
-Depends: ${misc:Depends}, salt-master, reclass
+Depends: ${misc:Depends}
 Description: ironic salt formula
  Install and configure ironic system.
