@@ -18,7 +18,7 @@ ironic_common_pkgs:
     - pkg: ironic_common_pkgs
 
 {%- if ironic.message_queue.get('ssl',{}).get('enabled', False) %}
-rabbitmq_ca_ironic_{{ service_name }}:
+rabbitmq_ca_ironic_file:
 {%- if ironic.message_queue.ssl.cacert is defined %}
   file.managed:
     - name: {{ ironic.message_queue.ssl.cacert_file }}
@@ -32,7 +32,7 @@ rabbitmq_ca_ironic_{{ service_name }}:
 {%- endif %}
 
 {%- if ironic.database.get('ssl',{}).get('enabled', False) %}
-mysql_ca_ironic_{{ service_name }}:
+mysql_ca_ironic_file:
 {%- if ironic.database.ssl.cacert is defined %}
   file.managed:
     - name: {{ ironic.databse.ssl.cacert_file }}

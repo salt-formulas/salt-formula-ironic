@@ -15,10 +15,10 @@ ironic_conductor_packages:
     - watch:
       - file: /etc/ironic/ironic.conf
     {%- if conductor.message_queue.get('ssl',{}).get('enabled', False) %}
-      - file: rabbitmq_ca_ironic_conductor
+      - file: rabbitmq_ca_ironic_file
     {%- endif %}
     {%- if conductor.database.get('ssl',{}).get('enabled', False) %}
-      - file: mysql_ca_ironic_conductor
+      - file: mysql_ca_ironic_file
     {%- endif %}
 
 ironic_dirs:
