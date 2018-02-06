@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+dpkg-maintscript-helper symlink_to_dir \
+        /usr/share/salt-formulas/env/ironic/files/pike /usr/share/salt-formulas/env/ironic/files/ocata salt-formula-ironic -- "$@"
+
+#DEBHELPER#
+
+exit 0

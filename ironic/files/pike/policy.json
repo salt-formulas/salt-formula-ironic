@@ -1,0 +1,17 @@
+{%- from "ironic/map.jinja" import api with context %}
+{
+{%- if api.api_type == 'deploy' %}
+{#- This is policy.json for deploy type of API, only heartbeat and lookup allowed #}
+"admin_api": "!",
+"public_api": "is_public_api:True",
+"is_observer": "!",
+"is_admin": "!"
+
+{%- elif  api.api_type == 'public' %}
+{#- This is policy.json for public API, block access to paswordless endpoints #}
+
+"public_api": "is_public_api:False"
+
+{%- endif %}
+
+}
