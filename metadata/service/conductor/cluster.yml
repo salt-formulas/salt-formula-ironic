@@ -1,6 +1,8 @@
 applications:
   - ironic
 parameters:
+  _param:
+    neutron_service_protocol: http
   ironic:
     conductor:
       enabled: true
@@ -42,7 +44,7 @@ parameters:
         project_name: ${ironic:conductor:identity:tenant}
         password: ${ironic:conductor:identity:password}
         username: ${ironic:conductor:identity:user}
-        url: http://${_param:neutron_service_host}:9696
+        url: ${_param:neutron_service_protocol}://${_param:neutron_service_host}:9696
       glance:
         auth_strategy: 'keystone'
         auth_type: password
