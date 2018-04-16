@@ -14,6 +14,8 @@ ironic_conductor_packages:
     - full_restart: true
     - watch:
       - file: /etc/ironic/ironic.conf
+    - require:
+      - pkg: ironic_conductor_packages
     {%- if conductor.message_queue.get('ssl',{}).get('enabled', False) %}
       - file: rabbitmq_ca_ironic_file
     {%- endif %}
@@ -29,7 +31,7 @@ ironic_dirs:
       makedirs: True
       user: 'ironic'
       group: 'ironic'
-    - require:
+    - require_in:
       - pkg: ironic_conductor_packages
 
 ironic_copy_pxelinux.0:
@@ -40,6 +42,7 @@ ironic_copy_pxelinux.0:
     - group: 'ironic'
     - require:
       - file: ironic_dirs
+      - pkg: ironic_conductor_packages
 
 {% for file in conductor.syslinux_files %}
 ironic_copy_{{ file }}:
@@ -50,6 +53,7 @@ ironic_copy_{{ file }}:
     - group: 'ironic'
     - require:
       - file: ironic_dirs
+      - pkg: ironic_conductor_packages
 {%- endfor %}
 
 {% for file in conductor.ipxe_rom_files %}
@@ -61,6 +65,7 @@ ironic_copy_{{ file }}:
     - group: 'ironic'
     - require:
       - file: ironic_dirs
+      - pkg: ironic_conductor_packages
 {%- endfor %}
 
 ironic_tftp_map_file:
@@ -73,6 +78,7 @@ ironic_tftp_map_file:
     - group: 'ironic'
     - require:
       - file: ironic_dirs
+      - pkg: ironic_conductor_packages
 
 {%- if conductor.http_images is defined %}
 {%- for image in conductor.http_images %}
