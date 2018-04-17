@@ -8,12 +8,14 @@ ironic_api_packages:
   - names: {{ api.pkgs }}
   - install_recommends: False
 
+{%- if api.api_type not in ["deploy"] %}
 ironic_install_database:
   cmd.run:
   - names:
     - ironic-dbsync --config-file /etc/ironic/ironic.conf upgrade
   - require:
     - file: /etc/ironic/ironic.conf
+{%- endif %}
 
 {{ api.service }}:
   service.running:
