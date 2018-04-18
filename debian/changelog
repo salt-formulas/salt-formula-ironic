@@ -1,4 +1,4 @@
-salt-formula-ironic (0.1-1xenial1) xenial; urgency=medium
+salt-formula-ironic (0.1) xenial; urgency=medium
 
   * Fix files/pike symlink
 
