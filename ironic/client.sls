@@ -10,12 +10,12 @@ ironic_client_pkg:
   {%- for node in nodes %}
 
 node_{{ node.name }}_present:
-  ironicng.node_present:
+  ironicv1.node_present:
     - name: {{ node.name }}
     - driver: {{ node.driver }}
-    - properties: {{ node.properties|default({}) }}
-    - profile: {{ identity_name }}
     - driver_info: {{ node.driver_info|default({}) }}
+    - cloud_name: {{ client.cloud_name }}
+    - properties: {{ node.properties|default({}) }}
     {%- if node.network_interface is defined %}
     - network_interface: {{ node.network_interface }}
     {%- endif %}
@@ -27,16 +27,16 @@ node_{{ node.name }}_present:
   {%- for port in node.ports %}
 
 {{ node.name }}_port{{ loop.index }}_present:
-  ironicng.port_present:
+  ironicv1.port_present:
     - address: {{ port.address }}
-    - node_name: {{ node.name }}
+    - node: {{ node.name }}
+    - cloud_name: {{ client.cloud_name }}
     {%- if port.local_link_connection is defined %}
     - local_link_connection: {{ port.local_link_connection }}
     {%- endif %}
     {%- if port.ironic_api_version is defined %}
     - ironic_api_version: "{{ port.ironic_api_version }}"
     {%- endif %}
-    - profile: {{ identity_name }}
 
   {%- endfor %} # end for ports
   {%- endif %} # end if node.ports defined
