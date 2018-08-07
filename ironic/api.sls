@@ -2,25 +2,21 @@
 {%- if api.enabled %}
 include:
   - ironic._common
+  - ironic.db.offline_sync
 
 ironic_api_packages:
   pkg.installed:
   - names: {{ api.pkgs }}
   - install_recommends: False
-
-{%- if api.api_type not in ["deploy"] %}
-ironic_install_database:
-  cmd.run:
-  - names:
-    - ironic-dbsync --config-file /etc/ironic/ironic.conf upgrade
-  - require:
-    - file: /etc/ironic/ironic.conf
-{%- endif %}
+  - require_in:
+    - sls: ironic.db.offline_sync
 
 {{ api.service }}:
   service.running:
     - enable: true
     - full_restart: true
+    - require:
+      - sls: ironic.db.offline_sync
     - watch:
       - file: /etc/ironic/ironic.conf
       - file: /etc/ironic/policy.json
