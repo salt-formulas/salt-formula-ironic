@@ -103,3 +103,37 @@ Standalone ironic without keystone
         user: openstack
         password: password
         virtual_host: '/openstack'
+
+Enable x509 and ssl communication between Ironic and Galera cluster.
+---------------------
+By default communication between Ironic and Galera is unsecure.
+
+ironic:
+  api:
+    database:
+      x509:
+        enabled: True
+  conductor:
+    database:
+      x509:
+        enabled: True
+
+You able to set custom certificates in pillar:
+
+ironic:
+  api:
+    database:
+      x509:
+        cacert: (certificate content)
+        cert: (certificate content)
+        key: (certificate content)
+  conductor:
+    database:
+      x509:
+        cacert: (certificate content)
+        cert: (certificate content)
+        key: (certificate content)
+
+You can read more about it here:
+    https://docs.openstack.org/security-guide/databases/database-access-control.html
+

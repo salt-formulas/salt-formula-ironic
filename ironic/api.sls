@@ -9,6 +9,7 @@ ironic_api_packages:
   - names: {{ api.pkgs }}
   - install_recommends: False
   - require_in:
+    - sls: ironic._common
     - sls: ironic.db.offline_sync
 
 {{ api.service }}:
@@ -16,15 +17,13 @@ ironic_api_packages:
     - enable: true
     - full_restart: true
     - require:
+      - sls: ironic._common
       - sls: ironic.db.offline_sync
     - watch:
       - file: /etc/ironic/ironic.conf
       - file: /etc/ironic/policy.json
     {%- if api.message_queue.get('ssl',{}).get('enabled', False) %}
       - file: rabbitmq_ca_ironic_file
-    {%- endif %}
-    {%- if api.database.get('ssl',{}).get('enabled', False) %}
-      - file: mysql_ca_ironic_file
     {%- endif %}
 
 /etc/ironic/policy.json:

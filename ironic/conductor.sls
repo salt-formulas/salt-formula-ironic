@@ -7,6 +7,8 @@ ironic_conductor_packages:
   pkg.installed:
   - names: {{ conductor.pkgs }}
   - install_recommends: False
+  - require_in:
+    - sls: ironic._common
 
 {{ conductor.service }}:
   service.running:
@@ -16,11 +18,9 @@ ironic_conductor_packages:
       - file: /etc/ironic/ironic.conf
     - require:
       - pkg: ironic_conductor_packages
+      - sls: ironic._common
     {%- if conductor.message_queue.get('ssl',{}).get('enabled', False) %}
       - file: rabbitmq_ca_ironic_file
-    {%- endif %}
-    {%- if conductor.database.get('ssl',{}).get('enabled', False) %}
-      - file: mysql_ca_ironic_file
     {%- endif %}
 
 ironic_dirs:
