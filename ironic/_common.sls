@@ -7,6 +7,7 @@
 
 include:
   - ironic._ssl.mysql
+  - ironic._ssl.rabbitmq
 
 ironic_common_pkgs:
   pkg.installed:
@@ -14,6 +15,7 @@ ironic_common_pkgs:
     - install_recommends: False
     - require_in:
       - sls: ironic._ssl.mysql
+      - sls: ironic._ssl.rabbitmq
 
 /etc/ironic/ironic.conf:
   file.managed:
@@ -22,17 +24,4 @@ ironic_common_pkgs:
   - require:
     - pkg: ironic_common_pkgs
     - sls: ironic._ssl.mysql
-
-{%- if ironic.message_queue.get('ssl',{}).get('enabled', False) %}
-rabbitmq_ca_ironic_file:
-{%- if ironic.message_queue.ssl.cacert is defined %}
-  file.managed:
-    - name: {{ ironic.message_queue.ssl.cacert_file }}
-    - contents_pillar: ironic:{{ service_name }}:message_queue:ssl:cacert
-    - mode: 0444
-    - makedirs: true
-{%- else %}
-  file.exists:
-   - name: {{ ironic.message_queue.ssl.get('cacert_file', ironic.cacert_file) }}
-{%- endif %}
-{%- endif %}
+    - sls: ironic._ssl.rabbitmq

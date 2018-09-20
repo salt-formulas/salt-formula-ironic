@@ -22,9 +22,6 @@ ironic_api_packages:
     - watch:
       - file: /etc/ironic/ironic.conf
       - file: /etc/ironic/policy.json
-    {%- if api.message_queue.get('ssl',{}).get('enabled', False) %}
-      - file: rabbitmq_ca_ironic_file
-    {%- endif %}
 
 /etc/ironic/policy.json:
   file.managed:
@@ -32,5 +29,7 @@ ironic_api_packages:
   - template: jinja
   - require:
     - pkg: ironic_api_packages
+  - require_in:
+    - sls: ironic.db.offline_sync
 
 {%- endif %}

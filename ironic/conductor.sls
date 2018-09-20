@@ -19,9 +19,6 @@ ironic_conductor_packages:
     - require:
       - pkg: ironic_conductor_packages
       - sls: ironic._common
-    {%- if conductor.message_queue.get('ssl',{}).get('enabled', False) %}
-      - file: rabbitmq_ca_ironic_file
-    {%- endif %}
 
 ironic_dirs:
   file.directory:

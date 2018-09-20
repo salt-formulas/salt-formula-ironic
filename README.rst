@@ -137,3 +137,39 @@ ironic:
 You can read more about it here:
     https://docs.openstack.org/security-guide/databases/database-access-control.html
 
+Enable x509 and ssl communication between Ironic and Rabbitmq.
+---------------------
+By default communication between Ironic and Rabbitmq is unsecure.
+
+.. code-block:: yaml
+
+ironic:
+  api:
+    message_queue:
+      x509:
+        enabled: True
+  conductor:
+    message_queue:
+      x509:
+        enabled: True
+
+You able to set custom certificates in pillar:
+
+.. code-block:: yaml
+
+ironic:
+  api:
+    message_queue:
+      x509:
+        cacert: (certificate content)
+        cert: (certificate content)
+        key: (certificate content)
+  conductor:
+    message_queue:
+      x509:
+        cacert: (certificate content)
+        cert: (certificate content)
+        key: (certificate content)
+
+You can read more about it here:
+    https://docs.openstack.org/security-guide/messaging/security.html
