@@ -10,6 +10,7 @@
         'service': 'ironic-api',
         'api_type': 'mixed',
         'cacert_file': cacert_file,
+        'notification': {}
     }
 }, base='Common', merge=pillar.ironic.get('api', {})) %}
 
@@ -18,6 +19,7 @@
         'service': 'ironic-conductor',
         'ipxe_rom_files': ['undionly.kpxe', 'ipxe.efi'],
         'cacert_file': cacert_file,
+        'notification': {}
     },
     'Debian': {
         'pkgs': ['ipmitool', 'ironic-conductor', 'tftpd-hpa', 'syslinux-common', 'pxelinux', 'ipxe'],
