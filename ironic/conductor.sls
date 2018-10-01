@@ -41,6 +41,52 @@ ironic_copy_pxelinux.0:
       - file: ironic_dirs
       - pkg: ironic_conductor_packages
 
+{%- if conductor.uefi.enabled %}
+ironic_conductor_uefi_packages:
+  pkg.installed:
+  - names: {{ conductor.uefi_pkgs }}
+  - install_recommends: False
+  - require_in:
+    - sls: ironic._common
+
+{% for file, args in conductor.uefi_files.items() %}
+ironic_copy_uefi_{{ file }}:
+  file.managed:
+    - name: {{ conductor.tftp_root }}/{{ args['dst'] }}
+    - source: {{ args['src'] }}
+    - user: 'ironic'
+    - group: 'ironic'
+    - require:
+      - file: ironic_dirs
+      - file: ironic_uefi_grub_dir
+      - pkg: ironic_conductor_packages
+      - pkg: ironic_conductor_uefi_packages
+{%- endfor %}
+
+ironic_uefi_grub_dir:
+  file.directory:
+    - name: {{ conductor.tftp_root }}/{{ conductor.uefi.grub_dir_name }}
+      makedirs: True
+      user: 'ironic'
+      group: 'ironic'
+    - require_in:
+      - pkg: ironic_conductor_packages
+      - pkg: ironic_conductor_uefi_packages
+
+ironic_uefi_grub_cfg:
+  file.managed:
+    - name: {{ conductor.tftp_root }}/{{ conductor.uefi.grub_dir_name }}/grub.cfg
+    - contents: 'GRUB_DIR={{ conductor.tftp_root }}/{{ conductor.uefi.grub_dir_name }}'
+    - user: 'ironic'
+    - group: 'ironic'
+    - mode: 644
+    - require:
+      - file: ironic_dirs
+      - file: ironic_uefi_grub_dir
+      - pkg: ironic_conductor_packages
+      - pkg: ironic_conductor_uefi_packages
+{%- endif %}
+
 {% for file in conductor.syslinux_files %}
 ironic_copy_{{ file }}:
   file.managed:

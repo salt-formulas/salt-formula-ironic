@@ -10,7 +10,11 @@
         'service': 'ironic-api',
         'api_type': 'mixed',
         'cacert_file': cacert_file,
-        'notification': {}
+        'notification': {},
+        'uefi': {
+            'grub_dir_name': 'grub',
+            'enabled': false
+        },
     }
 }, base='Common', merge=pillar.ironic.get('api', {})) %}
 
@@ -23,17 +27,47 @@
     },
     'Debian': {
         'pkgs': ['ipmitool', 'ironic-conductor', 'tftpd-hpa', 'syslinux-common', 'pxelinux', 'ipxe'],
+        'uefi_pkgs': ['grub-efi-amd64-signed', 'shim-signed'],
         'pxelinux_path': '/usr/lib/PXELINUX',
         'syslinux_files': ['chain.c32', 'libcom32.c32', 'libutil.c32', 'ldlinux.c32'],
         'syslinux_path': '/usr/lib/syslinux/modules/bios',
         'ipxe_rom_path': '/usr/lib/ipxe',
+        'uefi': {
+            'grub_dir_name': 'grub',
+            'enabled': false
+        },
+        'uefi_files': {
+            'shim': {
+                'src': '/usr/lib/shim/shimx64.efi.signed',
+                'dst': 'bootx64.efi'
+            },
+            'grub2': {
+                'src': '/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed',
+                'dst': 'grubx64.efi'
+            },
+        },
     },
     'RedHat': {
         'pkgs': ['ipmitool', 'ironic-conductor', 'tftp-server', 'syslinux-extlinux', 'ipxe-bootimgs'],
+        'uefi_pkgs': ['grub2-efi', 'shim'],
         'pxelinux_path': '/usr/share/syslinux',
         'syslinux_files': ['chain.c32'],
         'syslinux_path': '/usr/share/syslinux',
         'ipxe_rom_path': '/usr/share/ipxe',
+        'uefi': {
+            'grub_dir_name': 'EFI/centos',
+            'enabled': false
+        },
+        'uefi_files': {
+            'shim': {
+                'src': '/boot/efi/EFI/centos/shim.efi',
+                'dst': 'bootx64.efi'
+            },
+            'grub2': {
+                'src': '/boot/efi/EFI/centos/grubx64.efi',
+                'dst': 'grubx64.efi'
+            },
+        },
     },
 }, base='Common', merge=pillar.ironic.get('conductor', {})) %}
 

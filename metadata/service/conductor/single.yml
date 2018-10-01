@@ -4,6 +4,8 @@ parameters:
   ironic:
     conductor:
       enabled: true
+      uefi:
+        enabled: false
       version: ${_param:ironic_version}
       message_queue:
         engine: rabbitmq

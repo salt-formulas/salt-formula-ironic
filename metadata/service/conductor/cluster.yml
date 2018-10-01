@@ -6,6 +6,8 @@ parameters:
   ironic:
     conductor:
       enabled: true
+      uefi:
+        enabled: false
       version: ${_param:ironic_version}
       my_ip: ${_param:cluster_baremetal_local_address}
       message_queue:
