@@ -34,6 +34,7 @@ def node_present(name, cloud_name, driver, **kwargs):
                               format('node', e))
                 return _failed('create', name, resource)
             return _succeeded('create', name, resource, resp)
+        raise
 
     to_change = []
     for prop in kwargs:
