@@ -19,8 +19,8 @@ node_{{ node.name }}_present:
     {%- if node.network_interface is defined %}
     - network_interface: {{ node.network_interface }}
     {%- endif %}
-    {%- if node.ironic_api_version is defined %}
-    - ironic_api_version: "{{ node.ironic_api_version }}"
+    {%- if node.microversion is defined %}
+    - microversion: "{{ node.microversion }}"
     {%- endif %}
 
   {%- if node.ports is defined %}
@@ -34,8 +34,8 @@ node_{{ node.name }}_present:
     {%- if port.local_link_connection is defined %}
     - local_link_connection: {{ port.local_link_connection }}
     {%- endif %}
-    {%- if port.ironic_api_version is defined %}
-    - ironic_api_version: "{{ port.ironic_api_version }}"
+    {%- if port.microversion is defined %}
+    - microversion: "{{ port.microversion }}"
     {%- endif %}
 
   {%- endfor %} # end for ports
